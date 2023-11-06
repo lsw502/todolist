@@ -1,6 +1,6 @@
-import React from 'react';
-import './App.css';
-import { useState } from "react"
+// import React from 'react';
+// // import './App.css';
+// import { useState } from "react"
 
 
 function App() {
@@ -20,8 +20,6 @@ function App() {
       isDone: false,
     }
     setTodo([...todo, newTodo]);
-    setTitle("");
-    setContent("");
   }
   const titleChangeHandler = (e => {
     setTitle(e.target.value)
@@ -29,11 +27,12 @@ function App() {
   const contentChangeHandler = (e => {
     setContent(e.target.value)
   })
-  // working 삭제하기
+  //삭제하기
   const clickRemoveButtonHandler = (id) => {
     setTodo(todo.filter(item => item.id !== id))
   };
-  // working 저장
+  //저장하기
+
   const handlerDone = (Did) => {
     const newDone = {
       id: Did.id,
@@ -43,56 +42,40 @@ function App() {
     }
     setDoneTodo([...doneTodo, newDone])
     setTodo(todo.filter(item => item.id !== Did.id))
+
   };
 
-  // Done 삭제하기
-  const doneRemoveBtn = (id) => {
-    setDoneTodo(doneTodo.filter(item => item.id !== id))
-  }
+  const todoHandler=(item) => {
+    if(item.isDone === true){
+        return (
+          <div className="card">
+            <h2>{item.title}</h2>
+            <p>{item.content}</p>
+            <button onClick={() => clickRemoveButtonHandler(item.id)} className="box1_delete">삭제하기</button>
+            <button onClick={() => handlerDone(item.Did)} className="box1_complete">수정</button>
+          </div>
+        )
+    }else{
+        return (
+          <div className="card">
+            <h2>{item.title}</h2>
+            <p>{item.content}</p>
+            <button onClick={() => clickRemoveButtonHandler(item.id)} className="box1_delete">삭제하기</button>
+            <button onClick={() => handlerDone(item.Did)} className="box1_complete">저장</button>
+          </div>
+        )
+      }
+    };
+    
 
-  // Done 수정
-  const doneCancelBtn = ((cid) => {
-    const newCTodo = {
-      id: cid.id,
-      title: cid.title,
-      content: cid.content,
-      isDone: false,
-    }
-    setTodo([...todo, newCTodo])
-    setDoneTodo(doneTodo.filter(item => cid.id !== item.id))
-  })
+    const workingCardList = done.map(ite => {
+      todoHandler(item)
+    })
 
-  const todoHandler = (item) => {
-    if (item.isDone === false) {
-      // working 구역
-      return (
-        <div className="card">
-          <h2>{item.title}</h2>
-          <p>{item.content}</p>
-          <button onClick={() => clickRemoveButtonHandler(item.id)} className="box1_delete">삭제하기</button>
-          <button onClick={() => handlerDone(item)} className="box1_complete">저장</button>
-        </div>
-      )
-    } else {
-      // Done 구역
-      return (
-        <div className="card">
-          <h2>{item.title}</h2>
-          <p>{item.content}</p>
-          <button onClick={() => doneRemoveBtn(item.id)} className="box1_delete">삭제하기</button>
-          <button onClick={() => doneCancelBtn(item)} className="box1_complete">수정</button>
-        </div>
-      )
-    }
-  };
-
-  const workingCardList = todo.map(item => {
-    return todoHandler(item)
-  })
-
-  const doneCardList = doneTodo.map(item => {
-    return todoHandler(item)
-  })
+    const doneCardList = doneTodo.map(item => {
+      todoHandler(item)
+    })
+  
 
 
 
@@ -129,7 +112,9 @@ function App() {
       </div>
       {/* 투두리스트 카드 등록 */}
       <div className="box1">
-        {workingCardList}
+        {todo.map(item => {
+         todoHandler()
+        })}
       </div>
 
       <div className="done">
@@ -137,7 +122,9 @@ function App() {
       </div>
       {/* 투두리스트 카드 수정 */}
       <div className="box2">
-        {doneCardList}
+      {doneTodo.map(item => {
+        todoHandler()
+      })}
       </div>
 
     </div>
